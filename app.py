@@ -1,22 +1,24 @@
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), 'src'))
+
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from database.database import init_db
+from database.config import Config
+from database.database import db, init_db
 
 # Configuración de la aplicación Flask
 app = Flask(__name__)
-
-# Configuración de la base de datos SQLAlchemy
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://username:password@localhost/db_name'  # Cambiar según tus credenciales
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config.from_object(Config)
 
 # Inicialización de la extensión SQLAlchemy
-db = SQLAlchemy(app)
-
-# Inicialización de la base de datos
 init_db(app)
 
+# Crear las tablas de la base de datos
+with app.app_context():
+    db.create_all()
+
 # Importar rutas después de inicializar db para evitar ciclos de importación
-from reports.infrastructure.routes.report_routes import bp as report_routes_blueprint
+from reports.infraestructure.routes.report_routes import bp as report_routes_blueprint
 
 # Registro de Blueprints (rutas)
 app.register_blueprint(report_routes_blueprint)
