@@ -1,6 +1,7 @@
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from io import BytesIO
+from reportlab.lib.utils import ImageReader
 
 def create_pdf(report):
     buffer = BytesIO()
@@ -13,6 +14,14 @@ def create_pdf(report):
     p.drawString(100, 690, f"Colonia: {report.colonia}")
     p.drawString(100, 670, f"Código Postal: {report.codigo_postal}")
     p.drawString(100, 650, f"Fecha de Creación: {report.fecha_creacion}")
+    
+    # Agregar imagen al PDF
+    if report.imagen_url:
+        try:
+            image = ImageReader(report.imagen_url)
+            p.drawImage(image, 100, 400, width=200, height=200)
+        except Exception as e:
+            p.drawString(100, 630, f"Error al cargar imagen: {str(e)}")
     
     p.showPage()
     p.save()
