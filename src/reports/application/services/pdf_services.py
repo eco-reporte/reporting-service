@@ -2,6 +2,7 @@ from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from io import BytesIO
 from reportlab.lib.utils import ImageReader
+import datetime
 
 def create_pdf(report):
     buffer = BytesIO()
@@ -28,4 +29,10 @@ def create_pdf(report):
     
     pdf = buffer.getvalue()
     buffer.close()
-    return pdf
+
+    # Generar el nombre del archivo
+    title = report.titulo_reporte.replace(" ", "_")  # Reemplazar espacios con guiones bajos
+    date_str = report.fecha_creacion.strftime("%Y%m%d_%H%M%S")  # Formato de la fecha
+    filename = f"{title}_{date_str}.pdf"
+    
+    return pdf, filename
