@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "eco-reporte",
+  "private_key_id": "0a662fe2370248588ecb90d0e35a8f9c2bfdc811",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCmYB0rN8j6ETbS\nyHmLnfn9B0SR9UYnNgGhs2qWLhj25H+o+BIpcsCbHAsviWaPz2rS/TJj1h5jWoVN\nW3kfd1f3cEukgGaTu6C0h7xURS+CKxX7JfVTUS1ioFI/QH3c7DgNG54GNEY0qudV\nvKB14QLeCmS2n0toFHfHOjjA14b4sQgMpIiP9cYeokpTXlQwg55z95j4gTcJrva2\ncnvfmXfR1QBaQKAcKN2Wlidwz5Q7WjPyu19XMzKmUnaUpuV3auEpcfuOpnlfTgM1\nYVoNu0b5FnsvL/wiTUNrwlvfv7nVFaksu7wmhWvLr7e2+OYyefnHkghhlXVvTuu4\nqGIL9lDZAgMBAAECggEAG7E1Qa+GFeteFOz14CGCDdXTGbk5vUaNtHisxcTz9ko3\nnmv19+yn9tlO2lF0Hv0u4mHu7HOj+LUFKYhPa4edfmu0R3Pwvue0ur+5/svKOdAK\nl1Qs1nqVQ4x8TBdjq60ssi/V2GIEinkkyp48FgrHA6a2tzfh4PfBLQm5jw2Ao21t\nGe+VOUXIDze40yJfKz+hmmMXTfwX4i+DBU7JQdIp9gps9vmF60tWbhhnNuoSpxit\nPSC+WtqVO8uRTz2APmLYn1FGoQrYUZ6FiEmt7hfAK1zNxtLyjaxGeOdNyRPhh4ot\nlfOJyVeUNJo29mCaKjHihIXt8In9bCzr62I/wCHlRQKBgQDcCpS6hLeYhN3F3oBc\nChxHJDIcUjTjaVg1tMcDBw6xd8KuwujXH+mYA4ZQtp/DTIgmPV32titmN8ILKVmK\nbmdqVulKlnUZWfyPsflb5PNtWzYA3W1srjWf6/hUwNb7TNhg1asaIBDz/zgMkddi\nVgnEtFa+WQtpgqI4jTtJHbQgVQKBgQDBkGxNVx9JK5aZr+c89m7Uu4o8eqkxy7wL\nfmvIb8raz8HDVuATLGkBVGerC4WTAeGEbCZGmnLynLIzNHX2WivY6rJ3Z9VAufVy\nBAsv/nx5kz8L8DI/7X+wSQle48bD6IgS27e2DXCit+GxFJWJT39JZSZJKO7qPMy1\nalpZSjdidQKBgBWyPWP+vhOd1jgybjmlDZC+Muqz+F8L/hSdlJnp0jsRcfLFaSv9\nC41fm5jNyQb6vtn2ZxNydukHSmzLUPbjV/MWSr5+A2HSi6Kni8zR0GbR/YssSiPT\nMZppK/0/XnM86oDx0IMs8j78xUwH/VLG5QOuPHdcVFG8/b3RvyzAbwhZAoGAI7U6\n5YGe+eaan7t9kxd7Fq+KLuIJ+G+3Pv+RbqaA66DMA/cw2xikPmSNw1YazCXaro0s\n+nVfozYZAa053bqAwEF7rt9uzcQAbYolbjMqT1tElDU5b+WmWqT+n4yxjE6HW8NA\nvsr37myxq/M6KtyJhMauK2zrtjaFJSp7hGFWmkkCgYEAy3EznqmR+jqfZKZWKBsc\nYizgxik1+FpT9oTwBSRup5pRM/ioSDtMpg1QiVt8tqu9G6dzP11PIJX58xZveoaX\nnbbgLPVcZKHEfyqNgATF6EI34qWARz9X+yFJUz16HOZoGhb11mQGEKEkSk+cpP2w\nlFU+iN7pLXcQPJHhONe3dEo=\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-xqfm7@eco-reporte.iam.gserviceaccount.com",
+  "client_id": "109385317006374285753",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-xqfm7%40eco-reporte.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

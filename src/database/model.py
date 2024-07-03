@@ -8,5 +8,5 @@ class Reporte(db.Model):
     descripcion = db.Column(db.Text)
     colonia = db.Column(db.String(200))
     codigo_postal = db.Column(db.String(20))
-    imagen_url = db.Column(db.String(300))  # Campo para almacenar la URL de la imagen
+    imagen_url = db.Column(db.String(200))  # Nuevo campo para la URL de la imagen
     fecha_creacion = db.Column(db.DateTime, default=db.func.current_timestamp())
