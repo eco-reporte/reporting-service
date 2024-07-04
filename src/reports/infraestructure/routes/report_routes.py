@@ -12,16 +12,17 @@ report_service = ReportService(SQLAlchemyReportRepository())
 
 @bp.route('/reports', methods=['POST'])
 def create_report():
+    # Obtener datos del formulario
     report_data = request.form.to_dict()
     image_file = request.files['image']
 
+    # Crear reporte y subir imagen
     new_report = report_service.create_report(report_data, image_file)
+    
+    # Crear PDF
     pdf, filename = create_pdf(new_report)
-    pdf_url = report_service.upload_pdf_to_firebase(pdf, filename)
-
-    new_report.pdf_url = pdf_url
-    report_service.update_report(new_report)
-
+    
+    # Enviar PDF como respuesta
     return send_file(
         io.BytesIO(pdf),
         mimetype='application/pdf',

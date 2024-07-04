@@ -1,7 +1,7 @@
-# reports/application/services/report_service.py
-
 import firebase_admin
 from firebase_admin import credentials, storage
+
+from reports.application.services.pdf_services import create_pdf
 
 class ReportService:
     def __init__(self, report_repository):
@@ -22,25 +22,18 @@ class ReportService:
         report_data['imagen_url'] = blob.public_url
 
         # Crear reporte en la base de datos
-        return self.report_repository.create(report_data)
+        new_report = self.report_repository.create(report_data)
 
-    def upload_pdf_to_firebase(self, pdf_data, filename):
+        # Crear PDF
+        pdf, filename = create_pdf(new_report)
+
         # Subir PDF a Firebase Storage
-        bucket = storage.bucket()
-        blob = bucket.blob(f'pdfs/{filename}')
-        blob.upload_from_string(pdf_data, content_type='application/pdf')
-        blob.make_public()
-        return blob.public_url
-    
-    def update_report(self, report):
-        # Actualizar el reporte en la base de datos
-        self.report_repository.update(report)
+        pdf_blob = bucket.blob(f'reports/{filename}')
+        pdf_blob.upload_from_string(pdf, content_type='application/pdf')
+        pdf_blob.make_public()
+        new_report.pdf_url = pdf_blob.public_url
 
-    def delete_report(self, report_id):
-        return self.report_repository.delete(report_id)
+        # Actualizar reporte con la URL del PDF
+        self.report_repository.update(new_report)
 
-    def get_report_by_id(self, report_id):
-        return self.report_repository.get_by_id(report_id)
-
-    def get_all_reports(self):
-        return self.report_repository.get_all()
+        return new_report
