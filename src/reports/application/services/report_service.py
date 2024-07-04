@@ -1,7 +1,6 @@
 import firebase_admin
 from firebase_admin import credentials, storage
-
-from reports.application.services.pdf_services import create_pdf
+from src.reports.application.services.pdf_services import create_pdf
 
 class ReportService:
     def __init__(self, report_repository):
