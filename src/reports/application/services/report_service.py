@@ -36,3 +36,41 @@ class ReportService:
         self.report_repository.update(new_report)
 
         return new_report
+    
+    def get_report_by_id(self, report_id):
+        return self.report_repository.get_by_id(report_id)
+
+    def get_all_reports(self):
+        return self.report_repository.get_all()
+
+    def update_report(self, report_id, report_data):
+        report = self.get_report_by_id(report_id)
+        if report:
+            for key, value in report_data.items():
+                setattr(report, key, value)
+            return self.report_repository.update(report)
+        return None
+
+    def delete_report(self, report_id):
+        return self.report_repository.delete(report_id)
+
+    def get_pdf(self, report_id):
+        report = self.get_report_by_id(report_id)
+        if report and report.pdf_url:
+            bucket = storage.bucket()
+            blob = bucket.blob(report.pdf_url.split('/')[-1])
+            return blob.download_as_bytes()
+        return None
+
+    
+    def get_all_pdfs(self):
+        reports = self.get_all_reports()
+        pdfs = []
+        for report in reports:
+            if report.pdf_url:
+                pdfs.append({
+                    'id': report.id,
+                    'title': report.titulo_reporte,
+                    'pdf_url': report.pdf_url  # Esta es la URL completa de Firebase
+                })
+        return pdfs

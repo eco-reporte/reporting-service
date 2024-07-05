@@ -28,3 +28,7 @@ class SQLAlchemyReportRepository:
 
     def get_all(self):
         return Reporte.query.all()
+    
+    def get_all_pdf_urls(self):
+        reports = Reporte.query.all()
+        return [report.pdf_url for report in reports]
