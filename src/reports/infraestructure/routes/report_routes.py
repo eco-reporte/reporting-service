@@ -44,3 +44,7 @@ def get_all_pdfs():
 @bp.route('/reports/pdfs/download', methods=['GET'])
 def download_all_pdfs():
     return report_controller.download_all_pdfs()
+
+@bp.route('/reports', methods=['DELETE'])
+def delete_all_reports():
+    return report_controller.delete_all_reports()

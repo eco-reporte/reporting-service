@@ -74,3 +74,6 @@ class ReportService:
                     'pdf_url': report.pdf_url  # Esta es la URL completa de Firebase
                 })
         return pdfs
+    
+    def delete_all_reports(self):
+        return self.report_repository.delete_all()

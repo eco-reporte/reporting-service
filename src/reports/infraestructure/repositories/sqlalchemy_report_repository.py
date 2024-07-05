@@ -32,3 +32,8 @@ class SQLAlchemyReportRepository:
     def get_all_pdf_urls(self):
         reports = Reporte.query.all()
         return [report.pdf_url for report in reports]
+    
+    def delete_all(self):
+        deleted_count = db.session.query(Reporte).delete()
+        db.session.commit()
+        return deleted_count

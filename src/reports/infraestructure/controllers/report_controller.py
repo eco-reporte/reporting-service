@@ -65,6 +65,13 @@ class ReportController:
     def get_all_pdfs(self):
         pdfs = self.report_service.get_all_pdfs()
         return jsonify(pdfs)
+    
+    def delete_all_reports(self):
+        deleted_count = self.report_service.delete_all_reports()
+        return jsonify({
+            'message': f'Successfully deleted {deleted_count} reports',
+            'deleted_count': deleted_count
+        })
 
     def download_all_pdfs(self):
         reports = self.report_service.get_all_reports()
@@ -83,3 +90,4 @@ class ReportController:
                          mimetype='application/zip',
                          as_attachment=True,
                          download_name='all_reports.zip')
+        
