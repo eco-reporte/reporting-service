@@ -1,6 +1,6 @@
 # report_repository.py
-from database.database import db
-from reports.domain.entities.report import Report
+from src.database.database import db
+from src.reports.domain.entities.report import Report
 
 class ReportRepository:
     def create(self, report_data):
@@ -26,3 +26,5 @@ class ReportRepository:
             db.session.delete(report)
             db.session.commit()
         return report
+    
+    

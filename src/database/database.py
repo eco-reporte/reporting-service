@@ -1,6 +1,7 @@
-from flask_sqlalchemy import SQLAlchemy
+from src.database.config import Config
 
-db = SQLAlchemy()
-
-def init_db(app):
-    db.init_app(app)
+def get_db():
+    client = Config.init_db()
+    if client:
+        return client.get_default_database()
+    return None
