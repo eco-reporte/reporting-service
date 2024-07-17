@@ -208,3 +208,8 @@ class ReportService:
                     'pdf_url': report.pdf_url
                 })
         return pdfs
+    
+    def get_pdf_reports(self):
+        reports = self.report_repository.get_all()
+        return [{'titulo_reporte': report.titulo_reporte, 'pdf_url': report.pdf_url} 
+                for report in reports if report.pdf_url]

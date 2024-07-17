@@ -16,3 +16,20 @@ class Reporte(Document):
     pdf_url = StringField(max_length=200)
 
     meta = {'collection': 'reportes'}
+
+    def to_dict(self):
+        return {
+            'id': str(self.id),
+            'titulo_reporte': self.titulo_reporte,
+            'nombres': self.nombres,
+            'apellidos': self.apellidos,
+            'telefono': self.telefono,
+            'correo': self.correo,
+            'tipo_reporte': self.tipo_reporte,
+            'descripcion': self.descripcion,
+            'colonia': self.colonia,
+            'codigo_postal': self.codigo_postal,
+            'imagen_url': self.imagen_url,
+            'fecha_creacion': self.fecha_creacion.isoformat() if self.fecha_creacion else None,
+            'pdf_url': self.pdf_url
+        }

@@ -124,3 +124,10 @@ class ReportController:
             })
         except Exception as e:
             return jsonify({'error': str(e)}), 500
+    
+    def get_pdf_reports(self):
+        try:
+            pdf_reports = self.report_service.get_pdf_reports()
+            return jsonify(pdf_reports)
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
