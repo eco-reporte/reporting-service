@@ -33,3 +33,12 @@ class Reporte(Document):
             'fecha_creacion': self.fecha_creacion.isoformat() if self.fecha_creacion else None,
             'pdf_url': self.pdf_url
         }
+    
+class EstadisticasReporte(Document):
+    causa = StringField(max_length=200)
+    ubicacion = StringField(max_length=200)
+    afectado = StringField(max_length=200)
+    fecha_creacion = DateTimeField(default=datetime.utcnow)
+    tipo_reporte = StringField(max_length=100)
+
+    meta = {'collection': 'estadisticas_reportes'}

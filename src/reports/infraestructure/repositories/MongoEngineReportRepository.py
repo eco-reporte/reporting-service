@@ -15,8 +15,8 @@ class MongoEngineReportRepository:
             report.save()
             return report
         except Exception as e:
-            print(f"Error creating report: {e}")
-            return None
+            print(f"Error creating report: {str(e)}")
+            raise
 
     def update(self, report):
         try:
