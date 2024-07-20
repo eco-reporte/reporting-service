@@ -1,2 +1,2 @@
-database/firebase_config.json/
-database/config.ts
+src/database/firebase_config.json
+src/database/config.py
