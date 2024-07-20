@@ -24,5 +24,9 @@ def create_report_blueprint(report_service: ReportService, report_controller: Re
     @blueprint.route('/<string:report_id>', methods=['DELETE'])
     def delete_report(report_id):
         return report_controller.delete_report(report_id)
+    
+    @blueprint.route('/pdf-list', methods=['GET'])
+    def get_pdf_list():
+        return report_controller.get_pdf_list()
 
     return blueprint

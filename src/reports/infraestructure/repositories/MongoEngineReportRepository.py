@@ -63,3 +63,11 @@ class MongoEngineReportRepository:
         except Exception as e:
             print(f"Error deleting all reports: {e}")
             return 0
+        
+    def get_pdf_list(self):
+        try:
+            return [{"id": str(report.id), "pdf_url": report.pdf_url, "titulo_reporte": report.titulo_reporte} 
+                    for report in Reporte.objects() if hasattr(report, 'pdf_url') and report.pdf_url]
+        except Exception as e:
+            print(f"Error getting PDF list: {e}")
+            return []

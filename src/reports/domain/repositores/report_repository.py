@@ -27,4 +27,6 @@ class ReportRepository:
             db.session.commit()
         return report
     
+    def get_pdf_list(self):
+     return self.report_repository.get_pdf_list()
     

@@ -118,3 +118,7 @@ class ReportService:
 
     def get_report_count_by_type(self):
         return self.estadistica_repository.get_count_by_tipo_reporte()
+   
+    def get_pdf_list(self):
+        return self.report_repository.get_pdf_list()
+    

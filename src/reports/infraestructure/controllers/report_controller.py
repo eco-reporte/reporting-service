@@ -204,3 +204,10 @@ class ReportController:
             return jsonify({'error': 'Report not found'}), 404
         except Exception as e:
             return jsonify({'error': str(e)}), 500
+    
+    def get_pdf_list(self):
+        try:
+            pdf_list = self.report_service.get_pdf_list()
+            return jsonify(pdf_list), 200
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
