@@ -1,27 +1,18 @@
-from flask import Blueprint, jsonify, current_app
+from flask import Blueprint
+from src.reports.infraestructure.controllers.statistics_controller import StatisticsController
+from src.reports.application.services.report_service import ReportService
 
-bp = Blueprint('statistics', __name__)
+bp = Blueprint('statistics_routes', __name__)
 
-@bp.route('/time-series', methods=['GET'])
-def get_time_series():
-    report_service = current_app.report_service
-    chart_data = report_service.generate_time_series_chart()
-    return jsonify(chart_data)
+def create_statistics_blueprint(report_service: ReportService):
+    controller = StatisticsController(report_service)
 
-@bp.route('/pie-chart', methods=['GET'])
-def get_pie_chart():
-    report_service = current_app.report_service
-    chart_data = report_service.generate_pie_chart()
-    return jsonify(chart_data)
+    @bp.route('/report-count-by-type', methods=['GET'])
+    def report_count_by_type():
+        return controller.get_report_count_by_type()
 
-@bp.route('/category/<string:category>', methods=['GET'])
-def get_statistics_by_category(category):
-    report_service = current_app.report_service
-    statistics = report_service.get_statistics_by_category(category)
-    return jsonify(statistics)
+    @bp.route('/statistics-by-category', methods=['GET'])
+    def statistics_by_category():
+        return controller.get_statistics_by_category()
 
-@bp.route('/report-count', methods=['GET'])
-def get_report_count():
-    report_service = current_app.report_service
-    count = report_service.get_report_count_by_type()
-    return jsonify(count)
+    return bp

@@ -1,19 +1,18 @@
-import sys
-import os
-import firebase_admin
 from flask import Flask
+from flask_cors import CORS
+import firebase_admin
 from firebase_admin import credentials, storage
 from src.database.config import Config
 from src.reports.infraestructure.repositories.MongoEngineReportRepository import MongoEngineReportRepository
 from src.reports.application.services.report_service import ReportService
 from src.reports.infraestructure.controllers.report_controller import ReportController
-
-# Add the project root to the Python path
-project_root = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, project_root)
+from src.reports.infraestructure.controllers.statistics_controller import StatisticsController
+from src.reports.infraestructure.routes.report_routes import create_report_blueprint
+from src.reports.infraestructure.routes.statistics_routes import create_statistics_blueprint
 
 # Flask application configuration
 app = Flask(__name__)
+CORS(app) 
 app.config.from_object(Config)
 
 # Initialize Firebase
@@ -27,12 +26,13 @@ bucket = storage.bucket()
 report_repository = MongoEngineReportRepository()
 report_service = ReportService(report_repository, bucket)
 report_controller = ReportController(report_service)
+statistics_controller = StatisticsController(report_service)
 
-from src.reports.infraestructure.routes.report_routes import create_report_blueprint
-from src.reports.infraestructure.routes.statistics_routes import bp as statistics_routes_blueprint
-
+# Register blueprints
 report_routes_blueprint = create_report_blueprint(report_service, report_controller)
 app.register_blueprint(report_routes_blueprint, url_prefix='/reports')
+
+statistics_routes_blueprint = create_statistics_blueprint(report_service)
 app.register_blueprint(statistics_routes_blueprint, url_prefix='/statistics')
 
 if __name__ == '__main__':

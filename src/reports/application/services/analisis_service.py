@@ -1,3 +1,5 @@
+#analisis_service
+from io import BytesIO
 import matplotlib.pyplot as plt
 from datetime import datetime
 import pandas as pd
@@ -30,18 +32,34 @@ class AnalysisService:
         plt.pie(conteo_categorias, labels=conteo_categorias.index, autopct='%1.1f%%', startangle=140)
         plt.axis('equal')
         plt.title('Distribución de Causas de Reportes')
-        plt.show()
 
-    def generar_serie_tiempo(self, df):
-        df['fecha'] = pd.to_datetime(df['fecha'])
+        buf = BytesIO()
+        plt.savefig(buf, format='png')
+        buf.seek(0)
+        plt.close()
 
-        series_tiempo = df.groupby([df['fecha'].dt.to_period('M'), 'categoria']).size().unstack(fill_value=0)
+        return buf
 
-        series_tiempo.plot(kind='line', figsize=(15, 8))
-        plt.title('Series de Tiempo de Causas de Reportes')
-        plt.xlabel('Fecha')
-        plt.ylabel('Número de Reportes')
-        plt.show()
+def generar_serie_tiempo(self, df):
+    df['fecha'] = pd.to_datetime(df['fecha'])
+
+    series_tiempo = df.groupby([df['fecha'].dt.to_period('M'), 'categoria']).size().unstack(fill_value=0)
+
+    plt.figure(figsize=(15, 8))
+    series_tiempo.plot(kind='line')
+    plt.title('Series de Tiempo de Causas de Reportes')
+    plt.xlabel('Fecha')
+    plt.ylabel('Número de Reportes')
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+
+    buf = BytesIO()
+    plt.savefig(buf, format='png')
+    buf.seek(0)
+    plt.close()
+
+    return buf
+
 
 # Uso del servicio de análisis
 analysis_service = AnalysisService()

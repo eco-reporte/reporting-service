@@ -1,6 +1,7 @@
-import firebase_admin
+#report_Service
 from firebase_admin import credentials, storage
-from src.reports.domain.repositores.estadistica_repository import EstadisticaRepository
+from src.reports.domain.entities.estadistica_reporte import EstadisticaReporte
+from src.reports.infraestructure.repositories.MongoEngineEstadisticaReporte import MongoEngineEstadisticaRepository
 from src.reports.infraestructure.repositories.MongoEngineReportRepository import MongoEngineReportRepository
 from src.reports.application.services.pdf_services import create_pdf
 from src.reports.application.services.nlp_service import NLPService
@@ -8,7 +9,7 @@ from src.reports.application.services.nlp_service import NLPService
 class ReportService:
     def __init__(self, report_repository, bucket):
         self.report_repository = report_repository
-        self.estadistica_repository = EstadisticaRepository()
+        self.estadistica_repository = MongoEngineEstadisticaRepository()
         self.nlp_service = NLPService(self.estadistica_repository)
         self.bucket = bucket
 
@@ -35,7 +36,6 @@ class ReportService:
             'deleted_db_records': deleted_db_count
         }
      
-     
     def create_report(self, report_data, image_file):
         try:
             if not image_file:
@@ -48,9 +48,8 @@ class ReportService:
 
             new_report = self.report_repository.create(report_data)
 
-            estadistica = self.nlp_service.analizar_reporte(new_report)
-            if estadistica is None:
-                print("No se pudo crear la estadística del reporte")
+            # Analizar la descripción del reporte después de la creación
+            self.analizar_reporte(new_report)
 
             pdf, filename = create_pdf(new_report)
 
@@ -65,7 +64,38 @@ class ReportService:
         except Exception as e:
             print(f"Error en create_report: {str(e)}")
             raise
-        
+
+    def analizar_reporte(self, reporte):
+        try:
+            print("Inicio de análisis de reporte")
+            descripcion = reporte['descripcion']
+            tipo_reporte = reporte['tipo_reporte']
+            fecha_creacion = reporte['fecha_creacion']
+            print(f"Descripción: {descripcion}")
+            print(f"Tipo de reporte: {tipo_reporte}")
+            print(f"Fecha de creación: {fecha_creacion}")
+
+            # Use NLPService to extract information
+            causa, ubicacion, afectado = self.nlp_service.extraer_informacion(descripcion)
+            print(f"Causa extraída: {causa}")
+            print(f"Ubicación extraída: {ubicacion}")
+            print(f"Afectado extraído: {afectado}")
+
+            estadistica = EstadisticaReporte(
+                causa=causa,
+                ubicacion=ubicacion,
+                afectado=afectado,
+                fecha_creacion=fecha_creacion,
+                tipo_reporte=tipo_reporte
+            )
+
+            self.estadistica_repository.save(estadistica)
+            print("Reporte guardado en la base de datos")
+            return "Reporte analizado y guardado con éxito."
+        except Exception as e:
+            print(f"Error en analizar_reporte: {str(e)}")
+            return None
+
     def get_report_by_id(self, report_id):
         return self.report_repository.get_by_id(report_id)
 
@@ -121,4 +151,5 @@ class ReportService:
    
     def get_pdf_list(self):
         return self.report_repository.get_pdf_list()
+
     

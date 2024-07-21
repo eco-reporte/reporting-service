@@ -34,11 +34,11 @@ class Reporte(Document):
             'pdf_url': self.pdf_url
         }
     
-class EstadisticasReporte(Document):
-    causa = StringField(max_length=200)
-    ubicacion = StringField(max_length=200)
-    afectado = StringField(max_length=200)
-    fecha_creacion = DateTimeField(default=datetime.utcnow)
-    tipo_reporte = StringField(max_length=100)
-
+class EstadisticaReporte(Document):
+    causa = StringField(required=True)
+    ubicacion = StringField(required=True)
+    afectado = StringField(required=True)
+    fecha_creacion = DateTimeField(required=True)
+    tipo_reporte = StringField(required=True)
+    
     meta = {'collection': 'estadisticas_reportes'}

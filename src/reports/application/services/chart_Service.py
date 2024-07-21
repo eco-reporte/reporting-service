@@ -1,7 +1,8 @@
+#chart_service
 import matplotlib.pyplot as plt
 from io import BytesIO
-from src.reports.domain.repositories.estadistica_repository import EstadisticaRepository
 
+from reports.domain.repositores.estadistica_repository import EstadisticaRepository
 class ChartService:
     def __init__(self, estadistica_repository: EstadisticaRepository):
         self.estadistica_repository = estadistica_repository
