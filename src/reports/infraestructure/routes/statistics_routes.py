@@ -1,11 +1,11 @@
 from flask import Blueprint
+from src.reports.application.services import StatisticsService
 from src.reports.infraestructure.controllers.statistics_controller import StatisticsController
-from src.reports.application.services.report_service import ReportService
 
 bp = Blueprint('statistics_routes', __name__)
 
-def create_statistics_blueprint(report_service: ReportService):
-    controller = StatisticsController(report_service)
+def create_statistics_blueprint(statistics_service: StatisticsService):
+    controller = StatisticsController(statistics_service)
 
     @bp.route('/report-count-by-type', methods=['GET'])
     def report_count_by_type():
@@ -14,5 +14,21 @@ def create_statistics_blueprint(report_service: ReportService):
     @bp.route('/statistics-by-category', methods=['GET'])
     def statistics_by_category():
         return controller.get_statistics_by_category()
+
+    @bp.route('/top-causes', methods=['GET'])
+    def top_causes():
+        return controller.get_top_causes()
+
+    @bp.route('/pie-chart', methods=['GET'])
+    def pie_chart():
+        return controller.get_pie_chart()
+
+    @bp.route('/time-series-chart', methods=['GET'])
+    def time_series_chart():
+        return controller.get_time_series_chart()
+
+    @bp.route('/bar-chart', methods=['GET'])
+    def bar_chart():
+        return controller.get_bar_chart()
 
     return bp

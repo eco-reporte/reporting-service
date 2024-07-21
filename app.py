@@ -2,9 +2,13 @@ from flask import Flask
 from flask_cors import CORS
 import firebase_admin
 from firebase_admin import credentials, storage
+from src.reports.application.services.StatisticsService import StatisticsService
+from src.reports.application.services.chart_Service import ChartService
+from src.reports.infraestructure.repositories.MongoEngineEstadisticaReporte import MongoEngineEstadisticaRepository
 from src.database.config import Config
 from src.reports.infraestructure.repositories.MongoEngineReportRepository import MongoEngineReportRepository
 from src.reports.application.services.report_service import ReportService
+
 from src.reports.infraestructure.controllers.report_controller import ReportController
 from src.reports.infraestructure.controllers.statistics_controller import StatisticsController
 from src.reports.infraestructure.routes.report_routes import create_report_blueprint
@@ -22,17 +26,24 @@ firebase_admin.initialize_app(cred, {
 })
 bucket = storage.bucket()
 
-# Initialize services and controllers
+# Initialize repositories
 report_repository = MongoEngineReportRepository()
+estadistica_repository = MongoEngineEstadisticaRepository()
+
+# Initialize services
 report_service = ReportService(report_repository, bucket)
+chart_service = ChartService(estadistica_repository)
+statistics_service = StatisticsService(estadistica_repository, chart_service)
+
+# Initialize controllers
 report_controller = ReportController(report_service)
-statistics_controller = StatisticsController(report_service)
+statistics_controller = StatisticsController(statistics_service)
 
 # Register blueprints
 report_routes_blueprint = create_report_blueprint(report_service, report_controller)
 app.register_blueprint(report_routes_blueprint, url_prefix='/reports')
 
-statistics_routes_blueprint = create_statistics_blueprint(report_service)
+statistics_routes_blueprint = create_statistics_blueprint(statistics_service)
 app.register_blueprint(statistics_routes_blueprint, url_prefix='/statistics')
 
 if __name__ == '__main__':
