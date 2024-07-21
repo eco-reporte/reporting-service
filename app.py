@@ -23,6 +23,6 @@ else:
 from src.reports.infraestructure.routes.report_routes import bp as report_routes_blueprint
 app.register_blueprint(report_routes_blueprint)
 
-# Run the Flask application
+# Run the Flask application new
 if __name__ == '__main__':
     app.run(debug=True)
