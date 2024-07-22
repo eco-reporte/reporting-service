@@ -6,3 +6,13 @@ firebase-admin==5.2.0
 reportlab==3.5.67
 pandas==1.3.3
 requests==2.26.0
+
+# dame cada paquete en un comando de instalación con pip install
+pip install flask
+pip install Flask-SQLAlchemy
+pip install PyMySQL
+pip install SQLAlchemy
+pip install firebase-admin
+pip install reportlab
+pip install pandas
+pip install requests

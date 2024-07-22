@@ -26,4 +26,5 @@ app.register_blueprint(report_routes_blueprint)
 # Run the Flask application new
 if __name__ == '__main__':
     #asignar el puerto 3003
-    app.run(port=3003, debug=True)
+    app.run(host="0.0.0.0", port=3003, debug=True)
+    #windows app.run(port=3003, debug=True)
