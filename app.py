@@ -26,6 +26,7 @@ firebase_admin.initialize_app(cred, {
 })
 bucket = storage.bucket()
 
+
 # Initialize repositories
 report_repository = MongoEngineReportRepository()
 estadistica_repository = MongoEngineEstadisticaRepository()
