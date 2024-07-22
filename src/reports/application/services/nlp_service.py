@@ -9,7 +9,7 @@ import os
 load_dotenv()
 
 # Configura tu clave de API desde la variable de entorno
-openai.api_key = os.getenv('key_openai')
+openai.api_key = os.getenv('key_secret')
 
 class NLPService:
     def __init__(self, estadistica_repository: EstadisticaRepository):
