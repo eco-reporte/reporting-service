@@ -26,7 +26,6 @@ firebase_admin.initialize_app(cred, {
 })
 bucket = storage.bucket()
 
-
 # Initialize repositories
 report_repository = MongoEngineReportRepository()
 estadistica_repository = MongoEngineEstadisticaRepository()
@@ -48,4 +47,5 @@ statistics_routes_blueprint = create_statistics_blueprint(statistics_service)
 app.register_blueprint(statistics_routes_blueprint, url_prefix='/statistics')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=3003, debug=True)
+    # app.run(debug=True)
