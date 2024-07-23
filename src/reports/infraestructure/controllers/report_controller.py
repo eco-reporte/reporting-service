@@ -87,13 +87,14 @@ class ReportController:
         try:
             result = self.report_service.delete_all_reports()
             return jsonify({
-                'message': 'Successfully deleted all reports and associated files',
+                'message': 'Completed deletion of reports and associated files',
                 'deleted_files': result['deleted_files'],
-                'deleted_db_records': result['deleted_db_records']
-            }), 200
+                'deleted_db_records': result['deleted_db_records'],
+                'errors': result['errors']
+            }), 200 if not result['errors'] else 207  # Use 207 Multi-Status if there were some errors
         except Exception as e:
             return jsonify({'error': str(e)}), 500
-    
+        
     def get_pdf_list(self):
         try:
             pdf_list = self.report_service.get_pdf_list()

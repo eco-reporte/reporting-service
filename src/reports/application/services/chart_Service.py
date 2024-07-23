@@ -1,5 +1,8 @@
 import matplotlib.pyplot as plt
 from io import BytesIO
+import matplotlib
+matplotlib.use('Agg')
+
 
 from src.reports.domain.repositores.estadistica_repository import EstadisticaRepository
 

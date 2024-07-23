@@ -13,28 +13,28 @@ class ReportService:
         self.nlp_service = NLPService(self.estadistica_repository)
         self.bucket = bucket
 
-    def delete_all_reports(self):
-        reports = self.get_all_reports()
-        deleted_files_count = 0
-        for report in reports:
-            if report.pdf_url:
-                blob_name = report.pdf_url.split('/')[-1]
-                blob = self.bucket.blob(f'reports/{blob_name}')
-                blob.delete()
-                deleted_files_count += 1
+    # def delete_all_reports(self):
+    #     reports = self.get_all_reports()
+    #     deleted_files_count = 0
+    #     for report in reports:
+    #         if report.pdf_url:
+    #             blob_name = report.pdf_url.split('/')[-1]
+    #             blob = self.bucket.blob(f'reports/{blob_name}')
+    #             blob.delete()
+    #             deleted_files_count += 1
 
-            if report.imagen_url:
-                image_blob_name = report.imagen_url.split('/')[-1]
-                image_blob = self.bucket.blob(f'images/{image_blob_name}')
-                image_blob.delete()
-                deleted_files_count += 1
+    #         if report.imagen_url:
+    #             image_blob_name = report.imagen_url.split('/')[-1]
+    #             image_blob = self.bucket.blob(f'images/{image_blob_name}')
+    #             image_blob.delete()
+    #             deleted_files_count += 1
 
-        deleted_db_count = self.report_repository.delete_all()
+    #     deleted_db_count = self.report_repository.delete_all()
         
-        return {
-            'deleted_files': deleted_files_count,
-            'deleted_db_records': deleted_db_count
-        }
+    #     return {
+    #         'deleted_files': deleted_files_count,
+    #         'deleted_db_records': deleted_db_count
+    #     }
      
     def create_report(self, report_data, image_file):
         try:
@@ -75,19 +75,19 @@ class ReportService:
             print(f"Tipo de reporte: {tipo_reporte}")
             print(f"Fecha de creación: {fecha_creacion}")
 
-            # Use NLPService to extract information
+            # Usar NLPService para extraer información
             causa, ubicacion, afectado = self.nlp_service.extraer_informacion(descripcion)
             print(f"Causa extraída: {causa}")
             print(f"Ubicación extraída: {ubicacion}")
             print(f"Afectado extraído: {afectado}")
 
-            estadistica = EstadisticaReporte(
-                causa=causa,
-                ubicacion=ubicacion,
-                afectado=afectado,
-                fecha_creacion=fecha_creacion,
-                tipo_reporte=tipo_reporte
-            )
+            estadistica = {
+                'causa': causa,
+                'ubicacion': ubicacion,
+                'afectado': afectado,
+                'fecha_creacion': fecha_creacion,
+                'tipo_reporte': tipo_reporte
+            }
 
             self.estadistica_repository.save(estadistica)
             print("Reporte guardado en la base de datos")
@@ -95,7 +95,20 @@ class ReportService:
         except Exception as e:
             print(f"Error en analizar_reporte: {str(e)}")
             return None
-
+        
+    def get_reports_for_charts(self):
+        reports = self.get_all_reports()
+        chart_data = []
+        for report in reports:
+            chart_data.append({
+                'id': str(report.id),
+                'titulo_reporte': report.titulo_reporte,
+                'tipo_reporte': report.tipo_reporte,
+                'fecha_creacion': report.fecha_creacion,
+                # Agrega aquí cualquier otro campo que necesites para las gráficas
+            })
+        return chart_data
+    
     def get_report_by_id(self, report_id):
         return self.report_repository.get_by_id(report_id)
 
@@ -151,5 +164,37 @@ class ReportService:
    
     def get_pdf_list(self):
         return self.report_repository.get_pdf_list()
+    
+    def delete_all_reports(self):
+        reports = self.get_all_reports()
+        deleted_files_count = 0
+        errors = []
+
+        for report in reports:
+            if report.pdf_url:
+                blob_name = report.pdf_url.split('/')[-1]
+                blob = self.bucket.blob(f'reports/{blob_name}')
+                try:
+                    blob.delete()
+                    deleted_files_count += 1
+                except Exception as e:
+                    errors.append(f"Error deleting PDF file: {str(e)}")
+
+            if report.imagen_url:
+                image_blob_name = report.imagen_url.split('/')[-1]
+                image_blob = self.bucket.blob(f'images/{image_blob_name}')
+                try:
+                    image_blob.delete()
+                    deleted_files_count += 1
+                except Exception as e:
+                    errors.append(f"Error deleting image file: {str(e)}")
+
+        deleted_db_count = self.report_repository.delete_all()
+        
+        return {
+            'deleted_files': deleted_files_count,
+            'deleted_db_records': deleted_db_count,
+            'errors': errors
+        }
 
     
