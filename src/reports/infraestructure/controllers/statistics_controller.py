@@ -70,3 +70,18 @@ class StatisticsController:
             )
         except Exception as e:
             return jsonify({'error': str(e)}), 500
+    
+    def get_time_series_analysis(self):
+        start_date = request.args.get('start_date')
+        end_date = request.args.get('end_date')
+        try:
+            chart_bytes = self.statistics_service.generate_time_series_analysis(start_date, end_date)
+            return send_file(
+                BytesIO(chart_bytes),
+                mimetype='image/png',
+                as_attachment=True,
+                download_name='time_series_analysis.png'
+            )
+        except Exception as e:
+            print(f"Error en get_time_series_analysis: {str(e)}")
+            return jsonify({'error': str(e)}), 500

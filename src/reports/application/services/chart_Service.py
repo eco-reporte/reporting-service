@@ -56,3 +56,26 @@ class ChartService:
         plt.savefig(buf, format='png')
         plt.close()
         return buf.getvalue()
+    
+    def generar_analisis_serie_tiempo(self, result) -> bytes:
+        fig, (ax1, ax2, ax3, ax4) = plt.subplots(4, 1, figsize=(12, 16))
+        
+        result.observed.plot(ax=ax1)
+        ax1.set_title('Observado')
+        result.trend.plot(ax=ax2)
+        ax2.set_title('Tendencia')
+        result.seasonal.plot(ax=ax3)
+        ax3.set_title('Estacionalidad')
+        result.resid.plot(ax=ax4)
+        ax4.set_title('Residuos (Ruido)')
+
+        plt.tight_layout()
+
+        buf = BytesIO()
+        plt.savefig(buf, format='png')
+        buf.seek(0)
+        plt.close(fig)
+
+        return buf.getvalue()
+    
+    

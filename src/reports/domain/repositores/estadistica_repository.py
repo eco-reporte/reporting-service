@@ -1,14 +1,8 @@
+# src/reports/domain/repositories/estadistica_repository.py
+
 from abc import ABC, abstractmethod
 from typing import List, Dict, TypedDict, Optional
 from datetime import datetime
-
-class TipoReporteCount(TypedDict):
-    _id: str
-    count: int
-
-class CausaCount(TypedDict):
-    _id: str
-    count: int
 
 class EstadisticaData(TypedDict):
     id: str
@@ -17,6 +11,14 @@ class EstadisticaData(TypedDict):
     afectado: str
     fecha_creacion: datetime
     tipo_reporte: str
+
+class TipoReporteCount(TypedDict):
+    _id: str
+    count: int
+
+class CausaCount(TypedDict):
+    _id: str
+    count: int
 
 class EstadisticaRepository(ABC):
     @abstractmethod
@@ -32,7 +34,7 @@ class EstadisticaRepository(ABC):
         pass
 
     @abstractmethod
-    def get_by_date_range(self, start_date: datetime, end_date: datetime) -> List[EstadisticaData]:
+    def get_by_date_range(self, start_date: Optional[datetime], end_date: Optional[datetime]) -> List[EstadisticaData]:
         pass
 
     @abstractmethod

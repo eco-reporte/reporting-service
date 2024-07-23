@@ -30,5 +30,9 @@ def create_statistics_blueprint(statistics_service: StatisticsService):
     @bp.route('/bar-chart', methods=['GET'])
     def bar_chart():
         return controller.get_bar_chart()
+    
+    @bp.route('/time-series-analysis', methods=['GET'])
+    def time_series_analysis():
+        return controller.get_time_series_analysis()
 
     return bp
