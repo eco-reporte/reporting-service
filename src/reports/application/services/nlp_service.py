@@ -5,10 +5,8 @@ from src.reports.domain.repositores.estadistica_repository import EstadisticaRep
 from dotenv import load_dotenv
 import os
 
-# Cargar las variables de entorno desde el archivo .env
 load_dotenv()
 
-# Configura tu clave de API desde la variable de entorno
 openai.api_key = os.getenv('key_secret')
 
 class NLPService:
@@ -48,7 +46,7 @@ class NLPService:
 
         try:
             response = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo",  # O usa "gpt-4" si está disponible
+                model="gpt-3.5-turbo",  
                 messages=[
                     {"role": "system", "content": "Eres un asistente que extrae información de textos."},
                     {"role": "user", "content": prompt}

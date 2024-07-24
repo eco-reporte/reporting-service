@@ -34,5 +34,37 @@ def create_statistics_blueprint(statistics_service: StatisticsService):
     @bp.route('/time-series-analysis', methods=['GET'])
     def time_series_analysis():
         return controller.get_time_series_analysis()
+    
+    @bp.route('/regresion-lineal-multiple', methods=['POST'])
+    def regresion_lineal_multiple():
+        return controller.regresion_lineal_multiple()
+
+    @bp.route('/descomposicion-clasica', methods=['POST'])
+    def descomposicion_clasica():
+        return controller.descomposicion_clasica()
+
+    @bp.route('/descomposicion-stl', methods=['POST'])
+    def descomposicion_stl():
+        return controller.descomposicion_stl()
+
+    @bp.route('/suavizado-exponencial', methods=['POST'])
+    def suavizado_exponencial():
+        return controller.suavizado_exponencial()
+
+    @bp.route('/random-forest', methods=['POST'])
+    def random_forest():
+        return controller.random_forest()
+
+    @bp.route('/xgboost', methods=['POST'])
+    def xgboost():
+        return controller.xgboost()
+
+    @bp.route('/red-neuronal-lstm', methods=['POST'])
+    def red_neuronal_lstm():
+        return controller.red_neuronal_lstm()
+
+    @bp.route('/predecir', methods=['GET'])
+    def predecir():
+        return controller.predecir()
 
     return bp
