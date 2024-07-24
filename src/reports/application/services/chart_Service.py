@@ -3,8 +3,10 @@ import io
 import matplotlib.pyplot as plt
 from io import BytesIO
 import matplotlib
+import numpy as np
 import pandas as pd
 import seaborn as sns
+import matplotlib.colors as mcolors
 matplotlib.use('Agg')
 
 
@@ -45,20 +47,57 @@ class ChartService:
         return buf.getvalue()
 
     def generar_grafico_barras_causas(self, causas) -> bytes:
-        labels = [causa['_id'] for causa in causas]
-        values = [causa['count'] for causa in causas]
+        # Mantener el orden original de las causas
+        descripciones_largas = [causa['_id'] for causa in causas]
+        valores = [causa['count'] for causa in causas]
 
-        plt.figure(figsize=(12, 6))
-        plt.bar(labels, values)
-        plt.title('Top Causas de Reportes')
-        plt.xlabel('Causa')
-        plt.ylabel('Número de reportes')
-        plt.xticks(rotation=45, ha='right')
+        # Crear etiquetas cortas manteniendo el orden
+        etiquetas_cortas = [
+            "Construcción",
+            "Acuario",
+            "Basura parque",
+            "Qué pasó",
+            "Nuevo edificio",
+            "Derrame químico",
+            "Basura barrio",
+            "Acumulación basura",
+            "Construcción ruido",
+            "Fábrica cemento"
+        ]
+
+        # Crear colores
+        colores = plt.cm.get_cmap('tab10')(np.linspace(0, 1, len(etiquetas_cortas)))
+
+        # Crear la figura y los ejes
+        fig, ax = plt.subplots(figsize=(12, 6))
+
+        # Crear las barras
+        bars = ax.bar(range(len(valores)), valores, color=colores)
+
+        # Configurar el título y las etiquetas
+        ax.set_title('Top Causas de Reportes', fontsize=16)
+        ax.set_ylabel('Número de reportes', fontsize=12)
+
+        # Configurar el eje x
+        ax.set_xticks(range(len(etiquetas_cortas)))
+        ax.set_xticklabels(etiquetas_cortas, rotation=45, ha='right')
+
+        # Añadir los valores encima de las barras
+        for bar in bars:
+            height = bar.get_height()
+            ax.text(bar.get_x() + bar.get_width()/2., height,
+                    f'{height}', ha='center', va='bottom')
+
+        # Crear la leyenda
+        handles = [plt.Rectangle((0,0),1,1, color=colores[i]) for i in range(len(etiquetas_cortas))]
+        plt.legend(handles, descripciones_largas, title="Descripciones", 
+                loc='center left', bbox_to_anchor=(1, 0.5), fontsize=8)
+
         plt.tight_layout()
 
         buf = BytesIO()
-        plt.savefig(buf, format='png')
-        plt.close()
+        plt.savefig(buf, format='png', bbox_inches='tight', dpi=300)
+        plt.close(fig)
         return buf.getvalue()
     
     def generar_analisis_serie_tiempo(self, result) -> bytes:
