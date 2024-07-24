@@ -7,7 +7,7 @@ from src.reports.application.services.chart_Service import ChartService
 from src.reports.domain.repositores.estadistica_repository import EstadisticaRepository
 from statsmodels.tsa.seasonal import seasonal_decompose
 from typing import List, Dict
-from datetime import datetime
+from datetime import datetime, timedelta
 
 class StatisticsService:
     def __init__(self, estadistica_repository: EstadisticaRepository, chart_service: ChartService):
@@ -40,6 +40,15 @@ class StatisticsService:
     def generate_time_series_analysis(self, start_date: str, end_date: str) -> bytes:
         start = datetime.strptime(start_date, '%Y-%m-%d') if start_date else None
         end = datetime.strptime(end_date, '%Y-%m-%d') if end_date else None
+        
+        # Si no se proporciona una fecha de inicio, use los últimos 90 días
+        if not start:
+            start = end - timedelta(days=90) if end else datetime.now() - timedelta(days=90)
+        
+        # Si no se proporciona una fecha de fin, use la fecha actual
+        if not end:
+            end = datetime.now()
+        
         data = self.estadistica_repository.get_by_date_range(start, end)
         
         df = pd.DataFrame(data)
@@ -54,6 +63,13 @@ class StatisticsService:
         df['count'] = 1  # Asume que cada fila representa un evento
         df = df.resample('D')['count'].sum().fillna(0)
         
-        result = seasonal_decompose(df, model='additive', period=30)  # Ajusta el período según tus datos
+        # Asegúrate de tener al menos 60 observaciones
+        if len(df) < 60:
+            raise ValueError(f"Se requieren al menos 60 observaciones para el análisis. Solo hay {len(df)} observaciones.")
+        
+        # Ajusta el período según la cantidad de datos disponibles
+        period = min(30, len(df) // 2)  # Usa la mitad de la longitud de los datos, máximo 30
+        
+        result = seasonal_decompose(df, model='additive', period=period)
 
         return self.chart_service.generar_analisis_serie_tiempo(result)

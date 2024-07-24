@@ -82,6 +82,9 @@ class StatisticsController:
                 as_attachment=True,
                 download_name='time_series_analysis.png'
             )
-        except Exception as e:
+        except ValueError as e:
             print(f"Error en get_time_series_analysis: {str(e)}")
-            return jsonify({'error': str(e)}), 500
+            return jsonify({'error': str(e)}), 400  # Cambiado a 400 para indicar un error de cliente
+        except Exception as e:
+            print(f"Error inesperado en get_time_series_analysis: {str(e)}")
+            return jsonify({'error': 'Se produjo un error inesperado al generar el análisis de series temporales'}), 500
