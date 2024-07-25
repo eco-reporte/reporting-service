@@ -55,6 +55,7 @@ class ReportService:
             report_data['imagen_url'] = blob.public_url
 
             print("Creando nuevo reporte en la base de datos")
+            report_data['estatus'] = 'pendiente' 
             new_report = self.report_repository.create(report_data)
 
             print("Analizando reporte")
@@ -132,6 +133,11 @@ class ReportService:
         report = self.get_report_by_id(report_id)
         if report:
             for key, value in report_data.items():
+                if key == 'estatus':
+                    # Validar que el estatus sea válido (puedes agregar más validaciones)
+                    valid_statuses = ['pendiente', 'en_proceso', 'completado', 'cancelado']
+                    if value not in valid_statuses:
+                        raise ValueError(f"Estatus inválido: {value}")
                 setattr(report, key, value)
             return self.report_repository.update(report)
         return None
@@ -209,5 +215,21 @@ class ReportService:
             'deleted_db_records': deleted_db_count,
             'errors': errors
         }
+    
+    def update_status(self, report_id, new_status):
+        try:
+            report = self.get_report_by_id(report_id)
+            if report:
+                valid_statuses = ['pendiente', 'en_proceso', 'completado', 'cancelado']
+                if new_status not in valid_statuses:
+                    raise ValueError(f"Estatus inválido: {new_status}")
+                
+                report.estatus = new_status
+                updated_report = self.report_repository.update(report)
+                return updated_report
+            return None
+        except Exception as e:
+            print(f"Error updating report status: {str(e)}")
+            raise
 
     

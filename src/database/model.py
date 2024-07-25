@@ -14,6 +14,7 @@ class Reporte(Document):
     imagen_url = StringField(max_length=200)
     fecha_creacion = DateTimeField(default=datetime.utcnow)
     pdf_url = StringField(max_length=200)
+    estatus = StringField(max_length=50, default='pendiente')  # Nuevo campo
 
     meta = {'collection': 'reportes'}
 
@@ -31,7 +32,8 @@ class Reporte(Document):
             'codigo_postal': self.codigo_postal,
             'imagen_url': self.imagen_url,
             'fecha_creacion': self.fecha_creacion.isoformat() if self.fecha_creacion else None,
-            'pdf_url': self.pdf_url
+            'pdf_url': self.pdf_url,
+            'estatus': self.estatus
         }
     
 class EstadisticaReporte(Document):

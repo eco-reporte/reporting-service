@@ -101,3 +101,23 @@ class ReportController:
             return jsonify(pdf_list), 200
         except Exception as e:
             return jsonify({'error': str(e)}), 500
+    
+    def patch_report(self, report_id):
+        try:
+            data = request.get_json()
+            if not data:
+                return jsonify({'error': 'No input data provided'}), 400
+            
+            if 'estatus' in data:
+                valid_statuses = ['pendiente', 'en_proceso', 'completado', 'cancelado']
+                if data['estatus'] not in valid_statuses:
+                    return jsonify({'error': 'Estatus inválido'}), 400
+                
+                report = self.report_service.update_status(report_id, data['estatus'])
+                if report:
+                    return jsonify(report.to_dict()), 200
+                return jsonify({'error': 'Report not found'}), 404
+            else:
+                return jsonify({'error': 'Estatus no proporcionado'}), 400
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500

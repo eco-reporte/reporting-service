@@ -36,5 +36,9 @@ def create_report_blueprint(report_service: ReportService, report_controller: Re
     @blueprint.route('/pdf-list', methods=['GET'])
     def get_pdf_list():
         return report_controller.get_pdf_list()
+    
+    @blueprint.route('/<string:report_id>/status', methods=['PATCH'])
+    def update_report_status(report_id):
+        return report_controller.patch_report(report_id)
 
     return blueprint

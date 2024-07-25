@@ -11,6 +11,7 @@ class MongoEngineReportRepository:
 
     def create(self, report_data):
         try:
+            report_data['estatus'] = 'pendiente'  
             report = Reporte(**report_data)
             report.save()
             return report
@@ -24,6 +25,18 @@ class MongoEngineReportRepository:
             return report
         except Exception as e:
             print(f"Error updating report: {e}")
+            return None
+    
+    def update_status(self, report_id, new_status):
+        try:
+            report = self.get_by_id(report_id)
+            if report:
+                report.estatus = new_status
+                report.save()
+                return report
+            return None
+        except Exception as e:
+            print(f"Error updating report status: {e}")
             return None
 
     def delete(self, report_id):
@@ -66,7 +79,7 @@ class MongoEngineReportRepository:
         
     def get_pdf_list(self):
         try:
-            return [{"id": str(report.id), "pdf_url": report.pdf_url, "titulo_reporte": report.titulo_reporte} 
+            return [{"id": str(report.id), "pdf_url": report.pdf_url, "titulo_reporte": report.titulo_reporte, "estatus": report.estatus} 
                     for report in Reporte.objects() if hasattr(report, 'pdf_url') and report.pdf_url]
         except Exception as e:
             print(f"Error getting PDF list: {e}")
