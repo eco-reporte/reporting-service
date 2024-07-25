@@ -102,7 +102,7 @@ def create_pdf(report):
     footer_style = ParagraphStyle('Footer', parent=styles['Normal'], fontSize=8, alignment=1)
 
     # Add header with logo on the right
-    logo_path = "src\images\logo.png"  # Actualiza esto con la ruta real del logo
+    logo_path = "logo.png"  
     header = [
         [Paragraph("Reporte de Incidente Ambiental", title_style), Image(logo_path, width=100, height=50)]
     ]

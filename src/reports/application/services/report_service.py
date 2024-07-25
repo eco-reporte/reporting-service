@@ -5,6 +5,11 @@ from src.reports.infraestructure.repositories.MongoEngineEstadisticaReporte impo
 from src.reports.infraestructure.repositories.MongoEngineReportRepository import MongoEngineReportRepository
 from src.reports.application.services.pdf_services import create_pdf
 from src.reports.application.services.nlp_service import NLPService
+from tenacity import retry, stop_after_attempt, wait_exponential
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 class ReportService:
     def __init__(self, report_repository, bucket):
@@ -36,34 +41,42 @@ class ReportService:
     #         'deleted_db_records': deleted_db_count
     #     }
      
+    @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=4, max=10))
     def create_report(self, report_data, image_file):
         try:
+            print("Iniciando creación de reporte")
             if not image_file:
                 raise ValueError("No se proporcionó archivo de imagen")
 
+            print("Subiendo imagen al bucket")
             blob = self.bucket.blob(f'images/{image_file.filename}')
             blob.upload_from_file(image_file, content_type=image_file.content_type)
             blob.make_public()
             report_data['imagen_url'] = blob.public_url
 
+            print("Creando nuevo reporte en la base de datos")
             new_report = self.report_repository.create(report_data)
 
-            # Analizar la descripción del reporte después de la creación
+            print("Analizando reporte")
             self.analizar_reporte(new_report)
 
+            print("Creando PDF")
             pdf, filename = create_pdf(new_report)
 
+            print("Subiendo PDF al bucket")
             pdf_blob = self.bucket.blob(f'reports/{filename}')
             pdf_blob.upload_from_string(pdf, content_type='application/pdf')
             pdf_blob.make_public()
             new_report.pdf_url = pdf_blob.public_url
 
+            print("Actualizando reporte en la base de datos")
             self.report_repository.update(new_report)
 
             return new_report
         except Exception as e:
             print(f"Error en create_report: {str(e)}")
             raise
+
 
     def analizar_reporte(self, reporte):
         try:
