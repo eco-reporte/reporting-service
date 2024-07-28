@@ -26,4 +26,4 @@ services:
 
 networks:
   default:
-    name: eco-reporte-network
+    name: service-reporting

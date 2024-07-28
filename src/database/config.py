@@ -4,7 +4,7 @@ from pymongo.server_api import ServerApi
 from mongoengine import connect
 
 class Config:
-    MONGO_URI = os.environ.get('MONGO_URI', 'mongodb://localhost:27017/default_db')
+    MONGO_URI = os.environ.get('MONGO_URI')
     @staticmethod
     def init_db():
         try:
