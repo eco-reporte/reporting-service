@@ -21,7 +21,8 @@ CORS(app)
 app.config.from_object(Config)
 
 # Initialize Firebase
-cred = credentials.Certificate('src/database/firebase_config.json')
+firebase_config_path = os.getenv('FIREBASE_CONFIG_PATH', 'src/database/firebase_config.json')
+cred = credentials.Certificate(firebase_config_path)
 firebase_admin.initialize_app(cred, {
     'storageBucket': 'eco-reporte.appspot.com'
 })
@@ -51,4 +52,4 @@ import os
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 3003))
-    app.run(host="0.0.0.0", port=port, debug=False)
+    app.run(host="0.0.0.0", port=port, debug=True)
