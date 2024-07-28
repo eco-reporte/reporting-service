@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_cors import CORS
 import firebase_admin
+import os
 from firebase_admin import credentials, storage
 from src.reports.application.services.StatisticsService import StatisticsService
 from src.reports.application.services.chart_Service import ChartService
@@ -46,6 +47,8 @@ app.register_blueprint(report_routes_blueprint, url_prefix='/reports')
 statistics_routes_blueprint = create_statistics_blueprint(statistics_service)
 app.register_blueprint(statistics_routes_blueprint, url_prefix='/statistics')
 
+import os
+
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=3003, debug=True)
-    # app.run(debug=True)
+    port = int(os.environ.get('PORT', 3003))
+    app.run(host="0.0.0.0", port=port, debug=False)
