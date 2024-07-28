@@ -1,14 +1,29 @@
 version: '3.8'
 
 services:
-  app:
+  web:
     build: .
     ports:
       - "3003:3003"
+    environment:
+      - FLASK_ENV=production
+      - API_KEY=${API_KEY}
+      - MONGODB_URI=${MONGODB_URI}
+      - FIREBASE_TYPE=${FIREBASE_TYPE}
+      - FIREBASE_PROJECT_ID=${FIREBASE_PROJECT_ID}
+      - FIREBASE_PRIVATE_KEY_ID=${FIREBASE_PRIVATE_KEY_ID}
+      - FIREBASE_PRIVATE_KEY=${FIREBASE_PRIVATE_KEY}
+      - FIREBASE_CLIENT_EMAIL=${FIREBASE_CLIENT_EMAIL}
+      - FIREBASE_CLIENT_ID=${FIREBASE_CLIENT_ID}
+      - FIREBASE_AUTH_URI=${FIREBASE_AUTH_URI}
+      - FIREBASE_TOKEN_URI=${FIREBASE_TOKEN_URI}
+      - FIREBASE_AUTH_PROVIDER_X509_CERT_URL=${FIREBASE_AUTH_PROVIDER_X509_CERT_URL}
+      - FIREBASE_CLIENT_X509_CERT_URL=${FIREBASE_CLIENT_X509_CERT_URL}
+      - FIREBASE_UNIVERSE_DOMAIN=${FIREBASE_UNIVERSE_DOMAIN}
     volumes:
       - .:/app
-    environment:
-      FLASK_ENV: development
-      FLASK_RUN_HOST: 0.0.0.0
-      FLASK_RUN_PORT: 3003
-    command: python src/app.py
+    restart: always
+
+networks:
+  default:
+    name: eco-reporte-network
