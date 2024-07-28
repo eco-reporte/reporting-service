@@ -46,7 +46,7 @@ class NLPService:
 
         try:
             response = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo",  
+                model="gpt-4",  
                 messages=[
                     {"role": "system", "content": "Eres un asistente que extrae información de textos."},
                     {"role": "user", "content": prompt}
