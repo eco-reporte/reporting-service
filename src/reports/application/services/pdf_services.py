@@ -20,7 +20,7 @@ def create_pdf(report):
 
     # Ruta del logo
     base_dir = os.path.dirname(__file__)
-    logo_path = os.path.join(base_dir, '..', 'images', 'logo.png')
+    logo_path = os.path.join(base_dir, '..', 'images', 'src\images\logo.png')
 
     # Verifica si la imagen existe
     if os.path.isfile(logo_path):

@@ -7,8 +7,8 @@ services:
       - "3003:3003"
     environment:
       - FLASK_ENV=production
-      - API_KEY=${API_KEY}
-      - MONGODB_URI=${MONGODB_URI}
+      - key_secret=${key_secret}
+      - MONGO_URI=${MONGO_URI}
       - FIREBASE_TYPE=${FIREBASE_TYPE}
       - FIREBASE_PROJECT_ID=${FIREBASE_PROJECT_ID}
       - FIREBASE_PRIVATE_KEY_ID=${FIREBASE_PRIVATE_KEY_ID}
