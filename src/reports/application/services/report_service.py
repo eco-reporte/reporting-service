@@ -18,28 +18,7 @@ class ReportService:
         self.nlp_service = NLPService(self.estadistica_repository)
         self.bucket = bucket
 
-    # def delete_all_reports(self):
-    #     reports = self.get_all_reports()
-    #     deleted_files_count = 0
-    #     for report in reports:
-    #         if report.pdf_url:
-    #             blob_name = report.pdf_url.split('/')[-1]
-    #             blob = self.bucket.blob(f'reports/{blob_name}')
-    #             blob.delete()
-    #             deleted_files_count += 1
-
-    #         if report.imagen_url:
-    #             image_blob_name = report.imagen_url.split('/')[-1]
-    #             image_blob = self.bucket.blob(f'images/{image_blob_name}')
-    #             image_blob.delete()
-    #             deleted_files_count += 1
-
-    #     deleted_db_count = self.report_repository.delete_all()
-        
-    #     return {
-    #         'deleted_files': deleted_files_count,
-    #         'deleted_db_records': deleted_db_count
-    #     }
+    
      
     @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=4, max=10))
     def create_report(self, report_data, image_file):
@@ -134,7 +113,7 @@ class ReportService:
         if report:
             for key, value in report_data.items():
                 if key == 'estatus':
-                    # Validar que el estatus sea válido (puedes agregar más validaciones)
+                    
                     valid_statuses = ['pendiente', 'en_proceso', 'completado', 'cancelado']
                     if value not in valid_statuses:
                         raise ValueError(f"Estatus inválido: {value}")
